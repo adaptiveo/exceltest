@@ -4,13 +4,14 @@ from typing import Any
 import openpyxl as opxl
 
 FILENAME = "../excel/test.xlsx"
-USD = "USD"
-EUR = "EUR"
-RUR = "RUR"
 CUR_NAME_ROW = 3
 VAL_NAME_ROW = 5
+
 COME = 0
 OUT = 1
+CUR_DICT = ["USD", "EUR", "RUR"]
+NUM_TYPE = "n"
+STR_TYPE = "s"
 
 @dataclass
 class CCell:
@@ -26,9 +27,8 @@ ws = wb.active
 max_row_num = ws.max_row
 min_row_num = ws.min_row
 
-sum_usd = [0, 0]
-sum_eur = [0, 0]
-sum_rur = [0, 0]
+sum_array = [[0] * 2 for i in range(3)]
+
 shift = COME
 
 for i in range(min_row_num,max_row_num+1):
@@ -36,13 +36,10 @@ for i in range(min_row_num,max_row_num+1):
     if curr_cur_cell == None:
         shift = OUT
         continue
+    cur_index = CUR_DICT.index(curr_cur_cell)
     curr_num_cell = CCell (ws.cell(i, VAL_NAME_ROW).data_type, ws.cell(i, VAL_NAME_ROW).value)
-    if curr_num_cell.type == "n":
-        if curr_cur_cell == USD:
-            sum_usd[shift] = sum_usd[shift] + curr_num_cell.val
-        elif curr_cur_cell == EUR:
-            sum_eur[shift] = sum_eur[shift] + curr_num_cell.val
-        elif curr_cur_cell == RUR:
-            sum_rur[shift] = sum_rur[shift] + curr_num_cell.val
+    if curr_num_cell.type == NUM_TYPE:
+        sum_array[cur_index][shift] = sum_array[cur_index][shift] + curr_num_cell.val
 
-print(sum_usd)
+
+print(sum_array)
