@@ -43,3 +43,5 @@ for i in range(min_row_num,max_row_num+1):
 
 
 print(sum_array)
+ws.cell(7,7).value=sum_array[1][1]
+wb.save(FILENAME)
